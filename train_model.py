@@ -8,10 +8,10 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-print("Loading data...")
+print("Chargement des données...")
 df = pd.read_csv('datasets/billets.csv', sep=';')
 
-print("Imputing missing values...")
+print("Imputation des valeurs manquantes...")
 df_complete = df[df['margin_low'].notna()]
 df_missing = df[df['margin_low'].isna()]
 
@@ -24,7 +24,7 @@ df.loc[df['margin_low'].isna(), 'margin_low'] = model_impute.predict(
     df_missing[['diagonal', 'height_left', 'height_right', 'margin_up', 'length']]
 )
 
-print("Preparing data...")
+print("Préparation des données...")
 X = df.drop('is_genuine', axis=1)
 y = df['is_genuine']
 
@@ -36,15 +36,15 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.3, random_state=42, stratify=y
 )
 
-print("Training Logistic Regression model...")
+print("Entraînement du modèle de régression logistique...")
 final_model = LogisticRegression(random_state=42)
 final_model.fit(X_train, y_train)
 
-print("Saving model and scaler...")
+print("Sauvegarde du modèle et du scaler...")
 with open('models/best_model.pkl', 'wb') as f:
     pickle.dump(final_model, f)
 with open('models/scaler.pkl', 'wb') as f:
     pickle.dump(scaler, f)
 
-print("Done.")
-print(f"Model accuracy on test set: {final_model.score(X_test, y_test):.4f}")
+print("Terminé.")
+print(f"Précision du modèle sur l'ensemble de test : {final_model.score(X_test, y_test):.4f}")
