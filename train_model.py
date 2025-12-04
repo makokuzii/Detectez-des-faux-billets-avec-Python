@@ -26,7 +26,7 @@ df.loc[df['margin_low'].isna(), 'margin_low'] = model_impute.predict(
 
 print("Préparation des données...")
 X = df.drop('is_genuine', axis=1)
-y = df['is_genuine']
+y = df['is_genuine'].astype(int)
 
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
@@ -37,7 +37,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 print("Entraînement du modèle de régression logistique...")
-final_model = LogisticRegression(random_state=42)
+final_model = LogisticRegression(random_state=42, class_weight={0: 3, 1: 1}, max_iter=100)
 final_model.fit(X_train, y_train)
 
 print("Sauvegarde du modèle et du scaler...")
