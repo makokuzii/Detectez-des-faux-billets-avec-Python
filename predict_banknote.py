@@ -58,12 +58,12 @@ def predict(model, scaler, data):
     
     # Prédire
     prediction = model.predict(X_scaled)[0]
-    probability = model.predict_proba(X_scaled)[0]
+    probabilities = model.predict_proba(X_scaled)[0]
     
-    # Probabilité de Vrai (Authentique)
-    prob_genuine = probability[1]
+    prob_fake = probabilities[0]      # probability of Fake (class 0)
+    prob_genuine = probabilities[1]   # probability of Genuine (class 1)
     
-    return prediction, prob_genuine
+    return prediction, prob_fake, prob_genuine
 
 def main():
     parser = argparse.ArgumentParser(description="Prédire si un billet est Vrai ou Faux.")
@@ -93,14 +93,15 @@ def main():
         data = get_input_interactive()
 
     model, scaler = load_artifacts()
-    is_genuine, prob = predict(model, scaler, data)
+    is_genuine, prob_fake, prob_genuine = predict(model, scaler, data)
     
     result_text = "Vrai Billet" if is_genuine else "Faux Billet"
     color_code = "\033[92m" if is_genuine else "\033[91m" # Vert pour Vrai, Rouge pour Faux
     reset_code = "\033[0m"
     
     print(f"\nPrédiction : {color_code}{result_text}{reset_code}")
-    print(f"Probabilité d'être Vrai : {prob:.2%}")
+    print(f"Probabilité d'être Vrai : {prob_genuine:.2%}")
+    print(f"Probabilité d'être Faux : {prob_fake:.2%}")
 
 if __name__ == "__main__":
     main()
