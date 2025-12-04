@@ -116,4 +116,6 @@ wcwidth==0.2.14
 webcolors==25.10.0
 webencodings==0.5.1
 websocket-client==1.9.0
+xgboost==3.1.2
 yarg==0.1.9
+yellowbrick==1.5
